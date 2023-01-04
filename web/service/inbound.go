@@ -34,30 +34,6 @@ func (s *InboundService) GetAllInbounds() ([]*model.Inbound, error) {
 	return inbounds, nil
 }
 
-func (s *InboundService) checkPortExist(port int, ignoreId int) (bool, error) {
-	db := database.GetDB()
-	db = db.Model(model.Inbound{}).Where("port = ?", port)
-	if ignoreId > 0 {
-		db = db.Where("id != ?", ignoreId)
-	}
-	var count int64
-	err := db.Count(&count).Error
-	if err != nil {
-		return false, err
-	}
-	return count > 0, nil
-
-func (s *InboundService) AddInbounds(inbounds []*model.Inbound) error {
-	for _, inbound := range inbounds {
-		exist, err := s.checkPortExist(inbound.Port, 0)
-		if err != nil {
-			return err
-		}
-		if exist {
-			return common.NewError("端口已存在:", inbound.Port)
-		}
-	}
-
 	db := database.GetDB()
 	tx := db.Begin()
 	var err error
