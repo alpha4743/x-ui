@@ -94,7 +94,11 @@ func resetSetting() {
 
 func showSetting(show bool) {
 	if show {
-		
+		settingService := service.SettingService{}
+		port, err := settingService.GetPort()
+		if err != nil {
+			fmt.Println("get current port fialed,error info:", err)
+		}
 		userService := service.UserService{}
 		userModel, err := userService.GetFirstUser()
 		if err != nil {
@@ -283,6 +287,7 @@ func main() {
 		if show {
 			showSetting(show)
 		}
+		updateTgbotEnableSts(enabletgbot)
 		if (tgbottoken != "") || (tgbotchatid != 0) || (tgbotRuntime != "") {
 			updateTgbotSetting(tgbottoken, tgbotchatid, tgbotRuntime)
 		}
