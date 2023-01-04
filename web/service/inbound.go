@@ -71,13 +71,6 @@ func (s *InboundService) GetInbound(id int) (*model.Inbound, error) {
 }
 
 func (s *InboundService) UpdateInbound(inbound *model.Inbound) error {
-	exist, err := s.checkPortExist(inbound.Port, inbound.Id)
-	if err != nil {
-		return err
-	}
-	if exist {
-		return common.NewError("端口已存在:", inbound.Port)
-	}
 
 	oldInbound, err := s.GetInbound(inbound.Id)
 	if err != nil {
